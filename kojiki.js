@@ -9,7 +9,7 @@ function parseHeader(url, callback) {
     chrome.cookies.getAll({ url: url }, function(cookies) {
         var str = '';
         cookies.forEach(function(item) {
-            str += encodeURIComponent(item.name) + '=' + encodeURIComponent(item.value) + '; ';
+            str += item.name + '=' + item.value + '; ';
         });
         callback(str);
     });
