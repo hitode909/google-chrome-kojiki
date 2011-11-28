@@ -5,6 +5,14 @@ function copyString(string) {
     document.execCommand("copy", false, null);
 }
 
+function escapeshellarg (arg) {
+    var ret = '';
+    ret = arg.replace(/[^\\]'/g, function (m, i, s) {
+        return m.slice(0, 1) + '\\\'';
+    });
+    return "'" + ret + "'";
+}
+
 function parseHeader(url, callback) {
     chrome.cookies.getAll({ url: url }, function(cookies) {
         var str = '';
@@ -19,6 +27,7 @@ function wget_handler(info, tab) {
     var url = info.linkUrl ||info.pageUrl;
     parseHeader(url, function(cookie_str) {
         var command = "wget --cookies=off --header \"Cookie: " + cookie_str + "\" " + url;
+        var command = "wget --cookies=off --header \"Cookie: " + cookie_str + "\" " + escapeshellarg(url) + " --content-disposition";
         copyString(command);
     });
 }
@@ -26,7 +35,7 @@ function wget_handler(info, tab) {
 function curl_handler(info, tab) {
     var url = info.linkUrl ||info.pageUrl;
     parseHeader(url, function(cookie_str) {
-        var command = "curl --cookie \"" + cookie_str + "\" " + url;
+        var command = "curl --cookie \"" + cookie_str + "\" " + escapeshellarg(url);
         copyString(command);
     });
 }
@@ -34,7 +43,7 @@ function curl_handler(info, tab) {
 function curl_with_header_handler(info, tab) {
     var url = info.linkUrl ||info.pageUrl;
     parseHeader(url, function(cookie_str) {
-        var command = "curl -i --cookie \"" + cookie_str + "\" " + url;
+        var command = "curl -i --cookie \"" + cookie_str + "\" " + escapeshellarg(url);
         copyString(command);
     });
 }

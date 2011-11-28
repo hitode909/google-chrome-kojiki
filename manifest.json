@@ -1,6 +1,6 @@
 {
     "name": "kojiki",
-    "version": "1.2",
+    "version": "1.3",
     "description": "Copy wget or curl command to download page or link.",
     "permissions" : [
         "contextMenus",
